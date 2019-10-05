@@ -7,12 +7,13 @@
 {%- from tplroot ~ "/map.jinja" import iscsi with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
+    {%- if iscsi.config.data[iscsi.initiator.provider|string] %}
+
 include:
   - {{ sls_service_install }}
 
 iscsi-initiator-config-install-file-managed:
   file.managed:
-    - onlyif: {{ iscsi.config.data[iscsi.initiator.provider|string]|json }}
     - name: {{ iscsi.config.name[iscsi.initiator.provider] }}
     - source: {{ files_switch([iscsi.initiator.provider ~ '.tmpl'],
                               lookup='iscsi-initiator-config-install-file-managed',
@@ -29,3 +30,5 @@ iscsi-initiator-config-install-file-managed:
     - context:
       data: {{ iscsi.config.data[iscsi.initiator.provider|string]|json }}
       component: initiator
+
+    {%- endif %}

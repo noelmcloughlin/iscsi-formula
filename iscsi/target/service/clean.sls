@@ -14,8 +14,10 @@ iscsi-target-service-clean-service-dead:
     - unless: {{ grains.os in ('Amazon', 'MacOS') }}
     - name: {{ iscsi.config.servicename[iscsi.target.provider] }}
     - enable: False
+      {%- if iscsi.config.data[iscsi.target.provider|string] %}
     - require_in:
       - sls: {{ sls_config_clean }}
+      {%- endif %}
 
     {%- if grains.os_family == 'FreeBSD' %}
 

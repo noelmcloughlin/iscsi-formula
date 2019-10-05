@@ -4,10 +4,12 @@
 {#- Get the `tplroot` from `tpldir` #}
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_config_install = tplroot ~ '.initiator.config.install' %}
+{%- set sls_package_install = tplroot ~ '.initiator.package.install' %}
 {%- from tplroot ~ "/map.jinja" import iscsi with context %}
 
 include:
   - {{ sls_config_install }}
+  - {{ sls_package_install }}
 
     {%- if grains.os_family in ('FreeBSD',) %}
 
@@ -37,16 +39,19 @@ iscsi-initiator-service-install-service-running:
     - enable: True
     - onfail_in:
       - test: iscsi-initiator-service-install-check-status
+            {%- if iscsi.config.data[iscsi.initiator.provider|string] %}
+    - require:
+      - sls: {{ sls_config_install }}
+      - sls: {{ sls_package_install }}
     - watch:
       - file: iscsi-initiator-config-install-file-managed
+            {%- endif %}
         {%- endif %}
         {%- if servicename is iterable and servicename is not string %}
     - names: {{ servicename|json }}
           {%- else %}
     - name: {{ servicename }}
         {%- endif %}
-    - require:
-      - sls: {{ sls_config_install }}
 
 iscsi-initiator-service-install-check-status:
   test.show_notification:

@@ -13,5 +13,7 @@ iscsi-isns-service-clean-service-dead:
   service.dead:
     - name: {{ iscsi.config.servicename[iscsi.isns.provider] }}
     - enable: False
+        {%- if iscsi.config.data[iscsi.isns.provider|string] %}
     - require_in:
       - sls: {{ sls_config_clean }}
+        {%- endif %}

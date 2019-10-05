@@ -4,12 +4,14 @@
 {#- Get the `tplroot` from `tpldir` #}
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_config_install = tplroot ~ '.isns.config.install' %}
+{%- set sls_package_install = tplroot ~ '.isns.package.install' %}
 {%- from tplroot ~ "/map.jinja" import iscsi with context %}
 
     {%- set provider = iscsi.isns.provider %}
     {%- set servicename = iscsi.config.servicename[provider] %}
 include:
   - {{ sls_config_install }}
+  - {{ sls_package_install }}
 
 iscsi-isns-service-install-service-running:
         {%- if not iscsi.isns.enabled %}
@@ -22,10 +24,13 @@ iscsi-isns-service-install-service-running:
     - enable: True
     - onfail_in:
       - test: iscsi-isns-service-install-check-status
+            {%- if iscsi.config.data[iscsi.isns.provider|string] %}
     - require:
       - sls: {{ sls_config_install }}
+      - sls: {{ sls_package_install }}
     - watch:
       - file: iscsi-isns-config-install-file-managed-isnsd
+            {%- endif %}
         {%- endif %}
         {%- if servicename is iterable and servicename is not string %}
     - names: {{ servicename|json }}
