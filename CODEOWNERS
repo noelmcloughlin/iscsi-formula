@@ -15,7 +15,7 @@
 /docs/CHANGELOG.rst                         @saltstack-formulas/ssf
 /docs/TOFS_pattern.rst                      @saltstack-formulas/ssf
 /iscsi/libsaltcli.jinja                     @saltstack-formulas/ssf
-/iscsi/libtofs.jinja                        @saltstack-formulas/ssf
+/iscis/libtofs.jinja                        @saltstack-formulas/ssf
 /test/integration/**/inspec.yml             @saltstack-formulas/ssf
 /test/integration/**/README.md              @saltstack-formulas/ssf
 /.gitignore                                 @saltstack-formulas/ssf

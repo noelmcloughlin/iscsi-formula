@@ -12,7 +12,7 @@ ignore: |
   node_modules/
   test/**/states/**/*.sls
   .kitchen/
-  iscsi/oscodename.yaml
+  iscsi/osfamilymap.yaml
 
 yaml-files:
   # Default settings
@@ -23,8 +23,6 @@ yaml-files:
   # SaltStack Formulas additional settings
   - '*.example'
   - test/**/*.sls
-  # Formula-specific additional settings
-  - '*.arch'
 
 rules:
   empty-values:
